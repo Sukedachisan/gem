@@ -1,0 +1,235 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: RealEstateInquiry
+description: 不動産賃貸のお問い合わせデータモデル
+type: object
+additionalProperties: false
+required:
+  - submitted_at
+  - customer
+  - inquiries
+properties:
+  submitted_at:
+    title: Submitted At
+    description: お問い合わせ日時(ISO8601形式, JST)
+    type: string
+    format: date-time
+  customer:
+    $ref: '#/$defs/CustomerInfo'
+    description: 顧客情報
+  inquiries:
+    title: Inquiries
+    description: 問い合わせ詳細のリスト
+    type: array
+    items:
+      $ref: '#/$defs/InquiryDetail'
+$defs:
+  Conditions:
+    title: Conditions
+    type: object
+    additionalProperties: false
+    properties:
+      budget:
+        title: Budget
+        description: 家賃予算(上限)
+        default: null
+        anyOf:
+          - type: integer
+          - type: null
+      areas:
+        title: Areas
+        description: 希望エリア
+        default: null
+        anyOf:
+          - type: array
+            items:
+              type: string
+          - type: null
+      lines:
+        title: Lines
+        description: 希望沿線
+        default: null
+        anyOf:
+          - type: array
+            items:
+              type: string
+          - type: null
+      layouts:
+        title: Layouts
+        description: 希望間取り
+        default: null
+        anyOf:
+          - type: array
+            items:
+              type: string
+          - type: null
+      others:
+        title: Others
+        description: その他の希望条件
+        default: null
+        anyOf:
+          - type: array
+            items:
+              type: string
+          - type: null
+      instruments:
+        title: Instruments
+        description: 使用楽器の種類
+        default: null
+        anyOf:
+          - type: array
+            items:
+              type: string
+          - type: null
+  CustomerInfo:
+    title: CustomerInfo
+    description: 顧客情報
+    type: object
+    additionalProperties: false
+    required:
+      - name
+      - name_kana
+      - email
+    properties:
+      name:
+        title: Name
+        description: 顧客の氏名
+        type: string
+      name_kana:
+        title: Name Kana
+        description: 顧客の氏名（カナ）
+        type: string
+      email:
+        title: Email
+        description: メールアドレス
+        type: string
+      phones:
+        description: 電話番号情報
+        default: null
+        anyOf:
+          - $ref: '#/$defs/PhoneNumbers'
+          - type: null
+  InquiryDetail:
+    title: InquiryDetail
+    type: object
+    additionalProperties: false
+    required:
+      - outline
+      - category
+    properties:
+      property:
+        description: 物件情報
+        default: null
+        anyOf:
+          - $ref: '#/$defs/Property'
+          - type: null
+      conditions:
+        description: 検索・希望条件
+        default: null
+        anyOf:
+          - $ref: '#/$defs/Conditions'
+          - type: null
+      outline:
+        $ref: '#/$defs/InquiryOutline'
+        description: 問い合わせ概要(種別/連絡/時期/ペース)
+      category:
+        title: Category
+        description: お問い合わせの流入元/カテゴリ
+        type: string
+        enum:
+          - 物件別
+          - 物件リクエスト
+          - SUUMO
+          - オーナー
+          - その他
+      message:
+        title: Message
+        description: お問い合わせ内容
+        default: null
+        anyOf:
+          - type: string
+          - type: null
+  InquiryOutline:
+    title: InquiryOutline
+    description: 問い合わせ概要(種別/連絡/時期/ペース)
+    type: object
+    additionalProperties: false
+    required:
+      - contact_method
+    properties:
+      type:
+        title: Type
+        description: 具体的なお問い合わせ内容
+        default: null
+        anyOf:
+          - type: string
+            enum:
+              - 空室状況確認
+              - 内見希望
+              - 詳細確認
+              - 非掲載写真確認希望
+              - その他
+              - 募集時連絡希望
+              - オーナー
+              - 物件検索依頼
+          - type: null
+      contact_method:
+        title: Contact Method
+        description: 希望する連絡方法
+        type: string
+        enum:
+          - メール
+          - 電話
+          - どちらでも
+      is_leisurely:
+        title: Is Leisurely
+        description: 気ながに検索フラグ
+        default: null
+        anyOf:
+          - type: boolean
+          - type: null
+      move_in_plan:
+        title: Move In Plan
+        description: 入居希望時期
+        default: null
+        anyOf:
+          - type: string
+          - type: null
+  PhoneNumbers:
+    title: PhoneNumbers
+    description: 電話番号情報
+    type: object
+    additionalProperties: false
+    properties:
+      fixed:
+        title: Fixed
+        description: 固定電話番号
+        default: null
+        anyOf:
+          - type: string
+          - type: null
+      mobile:
+        title: Mobile
+        description: 携帯電話番号
+        default: null
+        anyOf:
+          - type: string
+          - type: null
+  Property:
+    title: Property
+    type: object
+    additionalProperties: false
+    properties:
+      id:
+        title: Id
+        description: 物件ID
+        default: null
+        anyOf:
+          - type: string
+          - type: null
+      name:
+        title: Name
+        description: 物件名称
+        default: null
+        anyOf:
+          - type: string
+          - type: null
