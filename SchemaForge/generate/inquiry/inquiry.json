@@ -1,9 +1,44 @@
 {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RealEstateInquiry",
+  "description": "不動産賃貸のお問い合わせデータモデル",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "submitted_at",
+    "customer",
+    "inquiries"
+  ],
+  "properties": {
+    "submitted_at": {
+      "title": "Submitted At",
+      "description": "お問い合わせ日時(ISO8601形式, JST)",
+      "type": "string",
+      "format": "date-time"
+    },
+    "customer": {
+      "$ref": "#/$defs/CustomerInfo",
+      "description": "顧客情報"
+    },
+    "inquiries": {
+      "title": "Inquiries",
+      "description": "問い合わせ詳細のリスト",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/InquiryDetail"
+      }
+    }
+  },
   "$defs": {
     "Conditions": {
+      "title": "Conditions",
+      "type": "object",
       "additionalProperties": false,
       "properties": {
         "budget": {
+          "title": "Budget",
+          "description": "家賃予算(上限)",
+          "default": null,
           "anyOf": [
             {
               "type": "integer"
@@ -11,115 +46,119 @@
             {
               "type": "null"
             }
-          ],
-          "default": null,
-          "description": "家賃予算(上限)",
-          "title": "Budget"
+          ]
         },
         "areas": {
+          "title": "Areas",
+          "description": "希望エリア",
+          "default": null,
           "anyOf": [
             {
+              "type": "array",
               "items": {
                 "type": "string"
-              },
-              "type": "array"
+              }
             },
             {
               "type": "null"
             }
-          ],
-          "default": null,
-          "description": "希望エリア",
-          "title": "Areas"
+          ]
         },
         "lines": {
+          "title": "Lines",
+          "description": "希望沿線",
+          "default": null,
           "anyOf": [
             {
+              "type": "array",
               "items": {
                 "type": "string"
-              },
-              "type": "array"
+              }
             },
             {
               "type": "null"
             }
-          ],
-          "default": null,
-          "description": "希望沿線",
-          "title": "Lines"
+          ]
         },
         "layouts": {
+          "title": "Layouts",
+          "description": "希望間取り",
+          "default": null,
           "anyOf": [
             {
+              "type": "array",
               "items": {
                 "type": "string"
-              },
-              "type": "array"
+              }
             },
             {
               "type": "null"
             }
-          ],
-          "default": null,
-          "description": "希望間取り",
-          "title": "Layouts"
+          ]
         },
         "others": {
+          "title": "Others",
+          "description": "その他の希望条件",
+          "default": null,
           "anyOf": [
             {
+              "type": "array",
               "items": {
                 "type": "string"
-              },
-              "type": "array"
+              }
             },
             {
               "type": "null"
             }
-          ],
-          "default": null,
-          "description": "その他の希望条件",
-          "title": "Others"
+          ]
         },
         "instruments": {
+          "title": "Instruments",
+          "description": "使用楽器の種類",
+          "default": null,
           "anyOf": [
             {
+              "type": "array",
               "items": {
                 "type": "string"
-              },
-              "type": "array"
+              }
             },
             {
               "type": "null"
             }
-          ],
-          "default": null,
-          "description": "使用楽器の種類",
-          "title": "Instruments"
+          ]
         }
-      },
-      "title": "Conditions",
-      "type": "object"
+      }
     },
     "CustomerInfo": {
-      "additionalProperties": false,
+      "title": "CustomerInfo",
       "description": "顧客情報",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "name_kana",
+        "email"
+      ],
       "properties": {
         "name": {
-          "description": "顧客の氏名",
           "title": "Name",
+          "description": "顧客の氏名",
           "type": "string"
         },
         "name_kana": {
-          "description": "顧客の氏名（カナ）",
           "title": "Name Kana",
+          "description": "顧客の氏名（カナ）",
           "type": "string"
         },
         "email": {
-          "description": "メールアドレス",
           "title": "Email",
+          "description": "メールアドレス",
           "type": "string"
         },
         "phones": {
+          "description": "電話番号情報",
+          "default": null,
           "anyOf": [
             {
               "$ref": "#/$defs/PhoneNumbers"
@@ -127,23 +166,22 @@
             {
               "type": "null"
             }
-          ],
-          "default": null,
-          "description": "電話番号情報"
+          ]
         }
-      },
-      "required": [
-        "name",
-        "name_kana",
-        "email"
-      ],
-      "title": "CustomerInfo",
-      "type": "object"
+      }
     },
     "InquiryDetail": {
+      "title": "InquiryDetail",
+      "type": "object",
       "additionalProperties": false,
+      "required": [
+        "outline",
+        "category"
+      ],
       "properties": {
         "property": {
+          "description": "物件情報",
+          "default": null,
           "anyOf": [
             {
               "$ref": "#/$defs/Property"
@@ -151,11 +189,11 @@
             {
               "type": "null"
             }
-          ],
-          "default": null,
-          "description": "物件情報"
+          ]
         },
         "conditions": {
+          "description": "検索・希望条件",
+          "default": null,
           "anyOf": [
             {
               "$ref": "#/$defs/Conditions"
@@ -163,27 +201,28 @@
             {
               "type": "null"
             }
-          ],
-          "default": null,
-          "description": "検索・希望条件"
+          ]
         },
         "outline": {
           "$ref": "#/$defs/InquiryOutline",
           "description": "問い合わせ概要(種別/連絡/時期/ペース)"
         },
         "category": {
+          "title": "Category",
           "description": "お問い合わせの流入元/カテゴリ",
+          "type": "string",
           "enum": [
             "物件別",
             "物件リクエスト",
             "SUUMO",
             "オーナー",
             "その他"
-          ],
-          "title": "Category",
-          "type": "string"
+          ]
         },
         "message": {
+          "title": "Message",
+          "description": "お問い合わせ内容",
+          "default": null,
           "anyOf": [
             {
               "type": "string"
@@ -191,26 +230,26 @@
             {
               "type": "null"
             }
-          ],
-          "default": null,
-          "description": "お問い合わせ内容",
-          "title": "Message"
+          ]
         }
-      },
-      "required": [
-        "outline",
-        "category"
-      ],
-      "title": "InquiryDetail",
-      "type": "object"
+      }
     },
     "InquiryOutline": {
-      "additionalProperties": false,
+      "title": "InquiryOutline",
       "description": "問い合わせ概要(種別/連絡/時期/ペース)",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contact_method"
+      ],
       "properties": {
         "type": {
+          "title": "Type",
+          "description": "具体的なお問い合わせ内容",
+          "default": null,
           "anyOf": [
             {
+              "type": "string",
               "enum": [
                 "空室状況確認",
                 "内見希望",
@@ -220,28 +259,27 @@
                 "募集時連絡希望",
                 "オーナー",
                 "物件検索依頼"
-              ],
-              "type": "string"
+              ]
             },
             {
               "type": "null"
             }
-          ],
-          "default": null,
-          "description": "具体的なお問い合わせ内容",
-          "title": "Type"
+          ]
         },
         "contact_method": {
+          "title": "Contact Method",
           "description": "希望する連絡方法",
+          "type": "string",
           "enum": [
             "メール",
             "電話",
             "どちらでも"
-          ],
-          "title": "Contact Method",
-          "type": "string"
+          ]
         },
         "is_leisurely": {
+          "title": "Is Leisurely",
+          "description": "気ながに検索フラグ",
+          "default": null,
           "anyOf": [
             {
               "type": "boolean"
@@ -249,12 +287,12 @@
             {
               "type": "null"
             }
-          ],
-          "default": null,
-          "description": "気ながに検索フラグ",
-          "title": "Is Leisurely"
+          ]
         },
         "move_in_plan": {
+          "title": "Move In Plan",
+          "description": "入居希望時期",
+          "default": null,
           "anyOf": [
             {
               "type": "string"
@@ -262,23 +300,20 @@
             {
               "type": "null"
             }
-          ],
-          "default": null,
-          "description": "入居希望時期",
-          "title": "Move In Plan"
+          ]
         }
-      },
-      "required": [
-        "contact_method"
-      ],
-      "title": "InquiryOutline",
-      "type": "object"
+      }
     },
     "PhoneNumbers": {
-      "additionalProperties": false,
+      "title": "PhoneNumbers",
       "description": "電話番号情報",
+      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "fixed": {
+          "title": "Fixed",
+          "description": "固定電話番号",
+          "default": null,
           "anyOf": [
             {
               "type": "string"
@@ -286,12 +321,12 @@
             {
               "type": "null"
             }
-          ],
-          "default": null,
-          "description": "固定電話番号",
-          "title": "Fixed"
+          ]
         },
         "mobile": {
+          "title": "Mobile",
+          "description": "携帯電話番号",
+          "default": null,
           "anyOf": [
             {
               "type": "string"
@@ -299,19 +334,19 @@
             {
               "type": "null"
             }
-          ],
-          "default": null,
-          "description": "携帯電話番号",
-          "title": "Mobile"
+          ]
         }
-      },
-      "title": "PhoneNumbers",
-      "type": "object"
+      }
     },
     "Property": {
+      "title": "Property",
+      "type": "object",
       "additionalProperties": false,
       "properties": {
         "id": {
+          "title": "Id",
+          "description": "物件ID",
+          "default": null,
           "anyOf": [
             {
               "type": "string"
@@ -319,12 +354,12 @@
             {
               "type": "null"
             }
-          ],
-          "default": null,
-          "description": "物件ID",
-          "title": "Id"
+          ]
         },
         "name": {
+          "title": "Name",
+          "description": "物件名称",
+          "default": null,
           "anyOf": [
             {
               "type": "string"
@@ -332,42 +367,9 @@
             {
               "type": "null"
             }
-          ],
-          "default": null,
-          "description": "物件名称",
-          "title": "Name"
+          ]
         }
-      },
-      "title": "Property",
-      "type": "object"
+      }
     }
-  },
-  "additionalProperties": false,
-  "description": "不動産賃貸のお問い合わせデータモデル",
-  "properties": {
-    "submitted_at": {
-      "description": "お問い合わせ日時(ISO8601形式, JST)",
-      "format": "date-time",
-      "title": "Submitted At",
-      "type": "string"
-    },
-    "customer": {
-      "$ref": "#/$defs/CustomerInfo",
-      "description": "顧客情報"
-    },
-    "inquiries": {
-      "description": "問い合わせ詳細のリスト",
-      "items": {
-        "$ref": "#/$defs/InquiryDetail"
-      },
-      "title": "Inquiries",
-      "type": "array"
-    }
-  },
-  "required": [
-    "customer",
-    "inquiries"
-  ],
-  "title": "RealEstateInquiry",
-  "type": "object"
+  }
 }
