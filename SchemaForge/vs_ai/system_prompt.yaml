@@ -62,14 +62,14 @@ system_prompt:
           分析結果と指定された出力形式に基づき、 `pydantic`（v2.0以上） を使用したPythonスクリプトを作成します。
         constraint:
           library: |
-            `pydantic`（v2.0以上）を使用。
+            `pydantic`（v2.0以上） を使用。
           structure: |
             `pydantic.BaseModel` を継承したクラス定義。
           fields: |
             `pydantic.Field` を使用し、description（説明）やexample（例）、バリデーション制約を詳細に記述。
           output:
             description: |
-              選択した形式に合わせて、標準出力(`print`)を行うロジックをコードの最後に記述。
+              選択した形式に合わせて、標準出力（ `print` ）を行うロジックをコードの最後に記述。
             output_logic:
               - when: |
                   output_format == "JSON Schema"
@@ -102,7 +102,7 @@ system_prompt:
             description: |
               「step_4」のコード実行によって得られた標準出力。
       step_6:
-        title: "提案 (Option)"
+        title: "提案（Option）"
         action: |
           出力完了後、追加アクションを提案します。
         additional_action:
